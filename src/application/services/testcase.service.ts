@@ -31,7 +31,7 @@ export const getTestCaseById = (id: number): TestCase | null => {
 
 type CreateTestCaseInput = {
   title: string;
-  description: string;
+  steps: string[];
   type: string;
 };
 
@@ -39,20 +39,15 @@ let nextTestCaseId = 700;
 
 export const createMockTestCase = ({
   title,
-  description,
+  steps,
   type,
 }: CreateTestCaseInput) => {
   return {
     id: nextTestCaseId++,
     title,
-    description,
     type,
     status: "created" as const,
-    steps: [
-      `Prepare the system state required for the ${type} scenario.`,
-      `Execute the workflow described by: ${title}.`,
-      `Verify the expected outcome matches: ${description}.`,
-    ],
+    steps,
     message: "Test case was created successfully in the mocked tracking system.",
   };
 };

@@ -15,7 +15,7 @@ Use this service when you need a lightweight mock of an issue-tracking platform:
 
 - Exposes REST endpoints for tasks, bugs, and test cases
 - Returns hardcoded records for `GET /:id` endpoints
-- Validates `POST /create` requests and requires `title`, `description`, and `type` in a JSON body
+- Validates `POST /create` requests with endpoint-specific required fields
 - Logs valid create payloads to the server output
 - Returns a mocked created entity payload for `POST /create` endpoints
 - Applies simulated network conditions to all requests:
@@ -84,7 +84,8 @@ Base URL: `http://localhost:3000`
   - Returns `404` when not found
 - `POST /testcases/create`
   - Requires `application/json`
-  - Requires `title`, `description`, and `type` as non-empty strings
+  - Requires `title` and `type` as non-empty strings
+  - Requires `steps` as a non-empty array of non-empty strings
   - Logs payload to server output
   - Returns `200` with `{ "status": "ok", "data": { ... } }`
 
@@ -147,7 +148,7 @@ curl -X POST http://localhost:3000/bugs/create \
 ```bash
 curl -X POST http://localhost:3000/testcases/create \
   -H "Content-Type: application/json" \
-  -d "{\"title\":\"Verify login flow\",\"description\":\"Validate that a registered user can sign in successfully\",\"type\":\"testcase\"}"
+  -d "{\"title\":\"Verify login flow\",\"type\":\"testcase\",\"steps\":[\"Open the sign-in page\",\"Enter valid credentials\",\"Click Login\",\"Verify the dashboard is displayed\"]}"
 ```
 
 ## Windows curl examples
@@ -198,6 +199,16 @@ If any of `title`, `description`, or `type` is missing or empty:
   "status": "error",
   "message": "Fields title, description, and type are required as non-empty strings in the JSON body.",
   "missingFields": ["title", "description", "type"]
+}
+```
+
+For `POST /testcases/create`, `steps` must be sent instead of `description`:
+
+```json
+{
+  "status": "error",
+  "message": "Fields title and type are required as non-empty strings, and steps is required as a non-empty string array in the JSON body.",
+  "missingFields": ["steps"]
 }
 ```
 

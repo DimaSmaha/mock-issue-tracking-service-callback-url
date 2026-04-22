@@ -3,11 +3,11 @@ import {
   getTestCase,
   createTestCase,
 } from "../controllers/testcase.controller";
-import { validateCreateEntityPayload } from "../../../shared/middleware/create-entity-validation.middleware";
+import { validateCreateTestCasePayload } from "../../../shared/middleware/create-entity-validation.middleware";
 
 const router = Router();
 
 router.get("/:id", getTestCase);
-router.post("/create", validateCreateEntityPayload, createTestCase);
+router.post("/create", validateCreateTestCasePayload, createTestCase);
 
 export default router;
