@@ -1,5 +1,8 @@
 import { Request, Response } from "express";
-import { getTaskById } from "../../../application/services/task.service";
+import {
+  createMockTask,
+  getTaskById,
+} from "../../../application/services/task.service";
 import { log } from "../../../shared/logger";
 
 export const getTask = (req: Request, res: Response) => {
@@ -13,5 +16,7 @@ export const getTask = (req: Request, res: Response) => {
 
 export const createTask = (req: Request, res: Response) => {
   log("Create Task payload:", req.body);
-  res.status(200).json({ status: "ok" });
+  const task = createMockTask(req.body);
+
+  res.status(200).json({ status: "ok", data: task });
 };

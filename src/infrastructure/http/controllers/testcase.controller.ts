@@ -1,5 +1,8 @@
 import { Request, Response } from "express";
-import { getTestCaseById } from "../../../application/services/testcase.service";
+import {
+  createMockTestCase,
+  getTestCaseById,
+} from "../../../application/services/testcase.service";
 import { log } from "../../../shared/logger";
 
 export const getTestCase = (req: Request, res: Response) => {
@@ -13,5 +16,7 @@ export const getTestCase = (req: Request, res: Response) => {
 
 export const createTestCase = (req: Request, res: Response) => {
   log("Create TestCase payload:", req.body);
-  res.status(200).json({ status: "ok" });
+  const testCase = createMockTestCase(req.body);
+
+  res.status(200).json({ status: "ok", data: testCase });
 };
