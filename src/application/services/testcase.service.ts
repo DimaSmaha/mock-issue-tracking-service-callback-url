@@ -14,7 +14,8 @@ const testcases: Record<number, TestCase> = {
   },
   116: {
     id: 116,
-    title: "Verify logout clears the active session and returns user to sign-in",
+    title:
+      "Verify logout clears the active session and returns user to sign-in",
     steps: [
       "Sign in with a valid user account and confirm the dashboard loads successfully.",
       "Open the account menu from the application header.",
@@ -35,7 +36,10 @@ type CreateTestCaseInput = {
   type: string;
 };
 
-let nextTestCaseId = 700;
+const createRandomKey = (prefix: string) => {
+  const value = Math.floor(100 + Math.random() * 90_000);
+  return `${prefix}-${value}`;
+};
 
 export const createMockTestCase = ({
   title,
@@ -43,11 +47,12 @@ export const createMockTestCase = ({
   type,
 }: CreateTestCaseInput) => {
   return {
-    id: nextTestCaseId++,
+    id: createRandomKey("TEST"),
     title,
     type,
     status: "created" as const,
     steps,
-    message: "Test case was created successfully in the mocked tracking system.",
+    message:
+      "Test case was created successfully in the mocked tracking system.",
   };
 };

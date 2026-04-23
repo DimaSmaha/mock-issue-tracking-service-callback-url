@@ -20,15 +20,14 @@ type CreateBugInput = {
   type: string;
 };
 
-let nextBugId = 500;
+const createRandomKey = (prefix: string) => {
+  const value = Math.floor(100 + Math.random() * 90_000);
+  return `${prefix}-${value}`;
+};
 
-export const createMockBug = ({
-  title,
-  description,
-  type,
-}: CreateBugInput) => {
+export const createMockBug = ({ title, description, type }: CreateBugInput) => {
   return {
-    id: nextBugId++,
+    id: createRandomKey("BUG"),
     title,
     description,
     type,

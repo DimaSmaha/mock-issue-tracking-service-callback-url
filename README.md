@@ -179,7 +179,7 @@ curl.exe --location http://localhost:3000/bugs/create `
 {
   "status": "ok",
   "data": {
-    "id": 500,
+    "id": "BUG-124",
     "title": "Login issue",
     "description": "Login button stays disabled after valid input",
     "type": "bug",
@@ -189,6 +189,8 @@ curl.exe --location http://localhost:3000/bugs/create `
   }
 }
 ```
+
+Create responses use random tracker-style keys such as `TASK-381`, `BUG-124`, or `TEST-673`.
 
 ### Validation error response
 

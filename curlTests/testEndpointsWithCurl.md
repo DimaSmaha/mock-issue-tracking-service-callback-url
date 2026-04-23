@@ -2,6 +2,8 @@
 
 These examples use `cmd.exe`-friendly `curl` syntax.
 
+Successful create responses return random tracker-style keys such as `TASK-381`, `BUG-124`, or `TEST-673`.
+
 ## /bugs
 
 GET success:

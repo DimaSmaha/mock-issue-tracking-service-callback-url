@@ -36,7 +36,10 @@ type CreateTaskInput = {
   type: string;
 };
 
-let nextTaskId = 600;
+const createRandomKey = (prefix: string) => {
+  const value = Math.floor(100 + Math.random() * 90_000);
+  return `${prefix}-${value}`;
+};
 
 export const createMockTask = ({
   title,
@@ -44,7 +47,7 @@ export const createMockTask = ({
   type,
 }: CreateTaskInput) => {
   return {
-    id: nextTaskId++,
+    id: createRandomKey("TASK"),
     title,
     description,
     type,
