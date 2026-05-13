@@ -58,6 +58,11 @@ Base URL: `http://localhost:3000`
   - Example: `GET /tasks/112`
   - Returns a mocked task when found
   - Returns `404` when not found
+- `GET /tasks/:id/linked-tc`
+  - Example: `GET /tasks/112/linked-tc`
+  - Returns full test case objects linked to the task
+  - Returns `[]` when the task exists but has no linked test cases
+  - Returns `404` when the task does not exist
 - `POST /tasks/create`
   - Requires `application/json`
   - Requires `title`, `description`, and `type` as non-empty strings
@@ -86,6 +91,8 @@ Base URL: `http://localhost:3000`
   - Requires `application/json`
   - Requires `title` and `type` as non-empty strings
   - Requires `steps` as a non-empty array of non-empty strings
+  - Accepts optional `parent_id` to link the created test case to a task
+  - Accepts optional `tag` and `dedupe_by`
   - Logs payload to server output
   - Returns `200` with `{ "status": "ok", "data": { ... } }`
 
@@ -135,6 +142,24 @@ curl -X POST http://localhost:3000/tasks/create \
   -d "{\"title\":\"Imported task\",\"description\":\"Create a task received from an external callback\",\"type\":\"story\"}"
 ```
 
+### Get linked test cases for a task
+
+```bash
+curl http://localhost:3000/tasks/112/linked-tc
+```
+
+### Get linked test cases for a task with no links
+
+```bash
+curl http://localhost:3000/tasks/114/linked-tc
+```
+
+### Get linked test cases for an unknown task
+
+```bash
+curl http://localhost:3000/tasks/999/linked-tc
+```
+
 ### Create a bug
 
 ```bash
@@ -149,6 +174,14 @@ curl -X POST http://localhost:3000/bugs/create \
 curl -X POST http://localhost:3000/testcases/create \
   -H "Content-Type: application/json" \
   -d "{\"title\":\"Verify login flow\",\"type\":\"testcase\",\"steps\":[\"Open the sign-in page\",\"Enter valid credentials\",\"Click Login\",\"Verify the dashboard is displayed\"]}"
+```
+
+### Create and link a test case to a task
+
+```bash
+curl -X POST http://localhost:3000/testcases/create \
+  -H "Content-Type: application/json" \
+  -d "{\"title\":\"Verify login flow\",\"type\":\"Test Case\",\"steps\":[\"Open the sign-in page\",\"Enter valid credentials\",\"Click Login\",\"Verify the dashboard is displayed\"],\"parent_id\":\"112\",\"tag\":\"automated\",\"dedupe_by\":\"title\"}"
 ```
 
 ## Windows curl examples
@@ -191,6 +224,44 @@ curl.exe --location http://localhost:3000/bugs/create `
 ```
 
 Create responses use random tracker-style keys such as `TASK-381`, `BUG-124`, or `TEST-673`.
+
+### Linked test cases response
+
+For `GET /tasks/112/linked-tc`, the response is a bare array of full linked test case objects created for that task:
+
+```json
+[
+  {
+    "id": "TEST-1001",
+    "title": "[P1] Auth: Login with valid credentials redirects to inventory page",
+    "type": "Test Case",
+    "steps": [
+      "# [P1] Auth: Login with valid credentials redirects to inventory page",
+      "Step 1: Navigate to https://www.saucedemo.com",
+      "  Expected: Login page is displayed with Username field, Password field, and Login button visible"
+    ],
+    "tag": "automated,claude-generated",
+    "parent_id": "112",
+    "dedupe_by": "title",
+    "status": "created",
+    "message": "Test case was created successfully in the mocked tracking system."
+  }
+]
+```
+
+For `GET /tasks/114/linked-tc`, the response is:
+
+```json
+[]
+```
+
+For an unknown task such as `GET /tasks/999/linked-tc`, the response is:
+
+```json
+{
+  "message": "Task not found"
+}
+```
 
 ### Validation error response
 

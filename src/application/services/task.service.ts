@@ -1,4 +1,6 @@
 import { Task } from "../../domain/models/task";
+import { TestCase } from "../../domain/models/testcase";
+import { getLinkedCreatedTestCasesByTaskId } from "./testcase.service";
 
 const tasks: Record<number, Task> = {
   112: {
@@ -28,6 +30,16 @@ const tasks: Record<number, Task> = {
 
 export const getTaskById = (id: number): Task | null => {
   return tasks[id] || null;
+};
+
+export const getLinkedTestCasesByTaskId = (id: number): TestCase[] | null => {
+  const task = getTaskById(id);
+
+  if (!task) {
+    return null;
+  }
+
+  return getLinkedCreatedTestCasesByTaskId(id);
 };
 
 type CreateTaskInput = {

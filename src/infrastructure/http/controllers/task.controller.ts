@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import {
   createMockTask,
   getTaskById,
+  getLinkedTestCasesByTaskId,
 } from "../../../application/services/task.service";
 import { log } from "../../../shared/logger";
 
@@ -12,6 +13,17 @@ export const getTask = (req: Request, res: Response) => {
   if (!task) return res.status(404).json({ message: "Task not found" });
 
   res.json(task);
+};
+
+export const getLinkedTestCases = (req: Request, res: Response) => {
+  const id = Number(req.params.id);
+  const linkedTestCases = getLinkedTestCasesByTaskId(id);
+
+  if (!linkedTestCases) {
+    return res.status(404).json({ message: "Task not found" });
+  }
+
+  res.json(linkedTestCases);
 };
 
 export const createTask = (req: Request, res: Response) => {

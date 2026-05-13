@@ -52,10 +52,34 @@ GET unsuccess:
 curl --location http://localhost:3000/tasks/999
 ```
 
+GET linked test cases success:
+
+```cmd
+curl --location http://localhost:3000/tasks/112/linked-tc
+```
+
+GET linked test cases no links:
+
+```cmd
+curl --location http://localhost:3000/tasks/114/linked-tc
+```
+
+GET linked test cases unknown task:
+
+```cmd
+curl --location http://localhost:3000/tasks/999/linked-tc
+```
+
 POST success:
 
 ```cmd
 curl --location http://localhost:3000/tasks/create --header "Content-Type: application/json" --data-raw "{\"title\":\"Imported task\",\"description\":\"Create a task received from an external callback\",\"type\":\"story\"}"
+```
+
+POST linked testcase success:
+
+```cmd
+curl --location http://localhost:3000/testcases/create --header "Content-Type: application/json" --data-raw "{\"title\":\"Verify login flow\",\"type\":\"Test Case\",\"steps\":[\"Open the sign-in page\",\"Enter valid credentials\",\"Click Login\",\"Verify the dashboard is displayed\"],\"parent_id\":\"112\",\"tag\":\"automated\",\"dedupe_by\":\"title\"}"
 ```
 
 POST unsuccess wrong body:
